@@ -99,10 +99,10 @@ const RouteInputPad = ({ boardTab }: { boardTab: BoardTabType }) => {
 
   return (
     <Box sx={rootSx} padding={padding} role="group" aria-label={t("路線輸入鍵盤")}>
-      <Box sx={numPadContainerSx} padding={padding} role="group" aria-label={t("數字鍵盤")}>
+      <Box sx={numPadContainerSx} padding={padding}>
         <RouteNumPad possibleChar={possibleChar} />
       </Box>
-      <Box sx={alphabetPadContainerSx} padding={padding} role="group" aria-label={t("字母鍵盤")}>
+      <Box sx={alphabetPadContainerSx} padding={padding}>
         <RouteAlphabetPad possibleChar={possibleChar} />
       </Box>
     </Box>

@@ -179,7 +179,7 @@ const SuccinctTimeReport = ({
           />
         )}
         {mode === "order" && (
-          <Box sx={iconContainerSx}>
+          <Box sx={iconContainerSx} aria-label={t("拖曳排序")}>
             <ReorderIcon aria-hidden="true" />
           </Box>
         )}
@@ -189,7 +189,7 @@ const SuccinctTimeReport = ({
               aria-label={t("刪除")}
               onClick={(e) => onDelete && onDelete(e)}
             >
-              <DeleteIcon />
+              <DeleteIcon aria-hidden="true" />
             </IconButton>
           </Box>
         )}
