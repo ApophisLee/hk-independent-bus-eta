@@ -3,12 +3,12 @@ import AppContext from "../context/AppContext";
 
 /**
  * Detects screen reader or VoiceOver usage and auto-enables
- * accessibility mode. Listens for:
- * 1. `prefers-reduced-motion` media query (common when VoiceOver is on).
- * 2. Messages from the React Native wrapper indicating VoiceOver state.
+ * accessibility mode. Listens for explicit VoiceOver/TalkBack signals
+ * from the React Native wrapper on both iOS (window) and Android
+ * (document) message targets.
  */
 const useAccessibilityDetection = (): void => {
-  const { accessibilityMode, setAccessibilityMode } = useContext(AppContext);
+  const { setAccessibilityMode } = useContext(AppContext);
 
   const handleNativeMessage = useCallback(
     (event: MessageEvent) => {
@@ -24,34 +24,18 @@ const useAccessibilityDetection = (): void => {
     [setAccessibilityMode]
   );
 
-  // Auto-enable when prefers-reduced-motion is detected (heuristic).
-  useEffect(() => {
-    if (accessibilityMode) return;
-
-    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mql.matches) {
-      setAccessibilityMode(true);
-    }
-
-    const onChange = (e: MediaQueryListEvent): void => {
-      if (e.matches) {
-        setAccessibilityMode(true);
-      }
-    };
-    mql.addEventListener("change", onChange);
-    return () => {
-      mql.removeEventListener("change", onChange);
-    };
-  }, [accessibilityMode, setAccessibilityMode]);
-
   // Listen for voiceover messages from React Native wrapper.
+  // iOS posts to window; Android posts to document.
   useEffect(() => {
-    window.addEventListener(
+    const messageTarget: Window | Document =
+      (window as any).iOSRNWebView ? window : document;
+
+    messageTarget.addEventListener(
       "message",
       handleNativeMessage as EventListener
     );
     return () => {
-      window.removeEventListener(
+      messageTarget.removeEventListener(
         "message",
         handleNativeMessage as EventListener
       );

@@ -130,7 +130,7 @@ const DataImport = () => {
       vibrateDuration: obj.vibrateDuration ?? 1,
       isVisible: true,
       analytics: obj.analytics ?? true,
-      refreshInterval: obj.refreshInterval ?? 30,
+      refreshInterval: obj.refreshInterval ?? 30000,
       annotateScheduled: obj.annotateScheduled ?? true,
       isRecentSearchShown: obj.isRecentSearchShown ?? true,
       accessibilityMode: obj.accessibilityMode ?? false,
