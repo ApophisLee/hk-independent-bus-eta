@@ -77,7 +77,11 @@ const TimeReport = ({
   }
 
   return (
-    <Box sx={containerSx}>
+    <Box
+      sx={containerSx}
+      aria-live="polite"
+      aria-atomic={true}
+    >
       {showStopName && (
         <Typography variant="caption">
           {stopList[stopId].name[language]}

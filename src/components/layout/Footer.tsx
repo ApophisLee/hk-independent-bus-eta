@@ -42,6 +42,8 @@ const Footer = () => {
         value={location.pathname.replace(/(.*)\/[0-9]*?$/, "$1")}
         showLabels={true}
         sx={rootSx}
+        role="navigation"
+        aria-label={t("底部導航")}
       >
         <BottomNavigationAction
           label={t("首頁")}
