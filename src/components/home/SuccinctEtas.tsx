@@ -121,7 +121,13 @@ const SuccinctEtas = ({
   };
 
   return (
-    <Box display="flex" flexDirection="column" textAlign="right">
+    <Box
+      display="flex"
+      flexDirection="column"
+      textAlign="right"
+      aria-live="polite"
+      aria-atomic="true"
+    >
       <Typography component="h5" color="textPrimary" sx={primarySx}>
         {etas ? getEtaString(etas[0], 0, true) : ""}
       </Typography>

@@ -33,6 +33,7 @@ import {
   UpdateDisabled as UpdateDisabledIcon,
   FormatSize as FormatSizeIcon,
   LooksOneRounded as LooksOneRoundedIcon,
+  Accessibility as AccessibilityIcon,
 } from "@mui/icons-material";
 import { ETA_FORMAT_STR } from "../../constants";
 import AppContext from "../../context/AppContext";
@@ -69,6 +70,8 @@ const OptionsList = ({ goToManage }: OptionsListProps) => {
     toggleAnnotateScheduled,
     isRecentSearchShown,
     toggleIsRecentSearchShown,
+    accessibilityMode,
+    toggleAccessibilityMode,
   } = useContext(AppContext);
   const { t } = useTranslation();
 
@@ -86,6 +89,25 @@ const OptionsList = ({ goToManage }: OptionsListProps) => {
           </Avatar>
         </ListItemAvatar>
         <ListItemText primary={t("管理收藏")} />
+      </ListItemButton>
+      <ListItemButton
+        onClick={() => {
+          vibrate(vibrateDuration);
+          toggleAccessibilityMode();
+        }}
+        aria-label={t("無障礙模式")}
+      >
+        <ListItemAvatar>
+          <Avatar>
+            <AccessibilityIcon />
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText
+          primary={t("無障礙模式")}
+          secondary={t(
+            accessibilityMode ? "無障礙模式已開啟" : "無障礙模式已關閉"
+          )}
+        />
       </ListItemButton>
       <ListItemButton
         onClick={() => {

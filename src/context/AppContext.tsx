@@ -99,6 +99,11 @@ export interface AppState {
    */
   isRecentSearchShown: boolean;
   /**
+   * Accessibility mode - simplified UI for screen reader users.
+   * Auto-enabled when VoiceOver or other screen readers are detected.
+   */
+  accessibilityMode: boolean;
+  /**
    * Font size
    */
   fontSize: number;
@@ -142,6 +147,8 @@ interface AppContextValue extends AppState {
   updateRefreshInterval: (interval: number) => void;
   toggleAnnotateScheduled: () => void;
   toggleIsRecentSearchShown: () => void;
+  toggleAccessibilityMode: () => void;
+  setAccessibilityMode: (enabled: boolean) => void;
   changeLanguage: (lang: Language) => void;
   setFontSize: (fontSize: number) => void;
   importAppState: (appState: AppState) => void;
@@ -256,6 +263,9 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
       ),
       isRecentSearchShown: !!JSON.parse(
         localStorage.getItem("isRecentSearchShown") ?? "true"
+      ),
+      accessibilityMode: !!JSON.parse(
+        localStorage.getItem("accessibilityMode") ?? "false"
       ),
       isVisible: true,
       analytics:
@@ -587,6 +597,22 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     );
   }, []);
 
+  const toggleAccessibilityMode = useCallback(() => {
+    setStateRaw(
+      produce((state: State) => {
+        state.accessibilityMode = !state.accessibilityMode;
+      })
+    );
+  }, []);
+
+  const setAccessibilityMode = useCallback((enabled: boolean) => {
+    setStateRaw(
+      produce((state: State) => {
+        state.accessibilityMode = enabled;
+      })
+    );
+  }, []);
+
   const changeLanguage = useCallback(
     (lang: Language) => {
       i18n.changeLanguage(lang);
@@ -743,6 +769,13 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   }, [state.isRecentSearchShown]);
 
   useEffect(() => {
+    localStorage.setItem(
+      "accessibilityMode",
+      JSON.stringify(state.accessibilityMode)
+    );
+  }, [state.accessibilityMode]);
+
+  useEffect(() => {
     localStorage.setItem("analytics", JSON.stringify(state.analytics));
   }, [state.analytics]);
 
@@ -813,6 +846,8 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
       updateRefreshInterval,
       toggleAnnotateScheduled,
       toggleIsRecentSearchShown,
+      toggleAccessibilityMode,
+      setAccessibilityMode,
       changeLanguage,
       setFontSize,
       importAppState,
@@ -846,6 +881,8 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
       updateRefreshInterval,
       toggleAnnotateScheduled,
       toggleIsRecentSearchShown,
+      toggleAccessibilityMode,
+      setAccessibilityMode,
       changeLanguage,
       setFontSize,
       importAppState,

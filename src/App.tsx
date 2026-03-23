@@ -22,6 +22,7 @@ import Root from "./components/layout/Root";
 import RedirectPage from "./pages/RedirectPagePage";
 import reportWebVitals, { sendToGoogleAnalytics } from "./reportWebVitals";
 import useLanguage from "./hooks/useTranslation";
+import useAccessibilityDetection from "./hooks/useAccessibilityDetection";
 import StopEtaListPage from "./pages/StopEtaListPage";
 
 const HomePage = React.lazy(() => import("./pages/HomePage"));
@@ -45,6 +46,7 @@ const DataExportPage = React.lazy(() => import("./pages/DataExportPage"));
 const App = () => {
   const { analytics, colorMode, fontSize } = useContext(AppContext);
   const language = useLanguage();
+  useAccessibilityDetection();
 
   const theme = useMemo(() => {
     return createTheme(getThemeTokens(colorMode, fontSize), [colorMode]);
