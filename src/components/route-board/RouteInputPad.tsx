@@ -7,6 +7,7 @@ import { type BoardTabType } from "../../@types/types";
 import { TRANSPORT_SEARCH_OPTIONS } from "../../constants";
 import { RouteList } from "hk-bus-eta";
 import DbContext from "../../context/DbContext";
+import { useTranslation } from "react-i18next";
 
 interface KeyButtonProps {
   k: string;
@@ -16,6 +17,7 @@ interface KeyButtonProps {
 }
 
 const KeyButton = ({ k, onClick, disabled = false, sx }: KeyButtonProps) => {
+  const { t } = useTranslation();
   return (
     <Button
       size="large"
@@ -24,11 +26,12 @@ const KeyButton = ({ k, onClick, disabled = false, sx }: KeyButtonProps) => {
       onClick={() => onClick(k)}
       disabled={disabled}
       disableRipple
+      aria-label={k === "b" ? t("倒退") : k === "c" ? t("清除") : k}
     >
       {k === "b" ? (
-        <BackspaceOutlinedIcon />
+        <BackspaceOutlinedIcon aria-hidden="true" />
       ) : k === "c" ? (
-        <DoNotDisturbOnOutlinedIcon />
+        <DoNotDisturbOnOutlinedIcon aria-hidden="true" />
       ) : (
         k
       )}
@@ -82,6 +85,7 @@ const RouteAlphabetPad = ({ possibleChar }: { possibleChar: string[] }) => {
 
 const RouteInputPad = ({ boardTab }: { boardTab: BoardTabType }) => {
   const { searchRoute } = useContext(AppContext);
+  const { t } = useTranslation();
   const {
     db: { routeList },
   } = useContext(DbContext);
@@ -94,11 +98,11 @@ const RouteInputPad = ({ boardTab }: { boardTab: BoardTabType }) => {
   }
 
   return (
-    <Box sx={rootSx} padding={padding}>
-      <Box sx={numPadContainerSx} padding={padding}>
+    <Box sx={rootSx} padding={padding} role="group" aria-label={t("路線輸入鍵盤")}>
+      <Box sx={numPadContainerSx} padding={padding} role="group" aria-label={t("數字鍵盤")}>
         <RouteNumPad possibleChar={possibleChar} />
       </Box>
-      <Box sx={alphabetPadContainerSx} padding={padding}>
+      <Box sx={alphabetPadContainerSx} padding={padding} role="group" aria-label={t("字母鍵盤")}>
         <RouteAlphabetPad possibleChar={possibleChar} />
       </Box>
     </Box>

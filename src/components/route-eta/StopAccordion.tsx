@@ -122,7 +122,7 @@ const StopAccordion = React.forwardRef<HTMLDivElement, StopAccordionProps>(
             <Box>
               {isStopAlarm && (
                 <IconButton
-                  aria-label="alert"
+                  aria-label={t("提醒通知")}
                   onClick={() => toggleStopAlarm(stopId)}
                   style={{ backgroundColor: "transparent" }}
                   size="large"
@@ -135,7 +135,7 @@ const StopAccordion = React.forwardRef<HTMLDivElement, StopAccordionProps>(
                 </IconButton>
               )}
               <IconButton
-                aria-label="stop-info"
+                aria-label={t("車站資訊")}
                 onClick={onStopInfoClick}
                 style={{ background: "transparent" }}
                 size="large"
@@ -143,7 +143,7 @@ const StopAccordion = React.forwardRef<HTMLDivElement, StopAccordionProps>(
                 <InfoIcon />
               </IconButton>
               <IconButton
-                aria-label="pin"
+                aria-label={t("釘選")}
                 onClick={() => togglePinnedEta(targetRouteId)}
                 style={{ backgroundColor: "transparent" }}
                 size="large"
@@ -157,7 +157,7 @@ const StopAccordion = React.forwardRef<HTMLDivElement, StopAccordionProps>(
             </Box>
             <Box>
               <IconButton
-                aria-label="share"
+                aria-label={t("分享")}
                 onClick={handleShareClick}
                 style={{ backgroundColor: "transparent" }}
                 size="large"
@@ -165,7 +165,7 @@ const StopAccordion = React.forwardRef<HTMLDivElement, StopAccordionProps>(
                 <ShareIcon />
               </IconButton>
               <IconButton
-                aria-label="favourite"
+                aria-label={t("收藏")}
                 onClick={() => {
                   setCollectionDrawerRoute(targetRouteId);
                 }}

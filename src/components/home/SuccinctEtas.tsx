@@ -121,7 +121,7 @@ const SuccinctEtas = ({
   };
 
   return (
-    <Box display="flex" flexDirection="column" textAlign="right">
+    <Box display="flex" flexDirection="column" textAlign="right" aria-live="polite" aria-atomic="true">
       <Typography component="h5" color="textPrimary" sx={primarySx}>
         {etas ? getEtaString(etas[0], 0, true) : ""}
       </Typography>
@@ -140,6 +140,7 @@ export const SingleTrainIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
+    aria-hidden="true"
     style={{
       marginRight: 8,
       width: "1em",
@@ -159,6 +160,7 @@ export const DoubleTrainIcon = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
+      aria-hidden="true"
       style={{
         width: "1em",
         height: "1em",
@@ -172,6 +174,7 @@ export const DoubleTrainIcon = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
+      aria-hidden="true"
       style={{
         marginRight: 8,
         width: "1em",

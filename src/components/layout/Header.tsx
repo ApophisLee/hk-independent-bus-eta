@@ -138,7 +138,7 @@ const Header = () => {
   };
 
   return (
-    <Toolbar sx={rootSx}>
+    <Toolbar component="header" sx={rootSx}>
       <Link
         to={`/${language}`}
         onClick={(e) => {
@@ -147,11 +147,11 @@ const Header = () => {
           navigate(`/${language}`);
         }}
         rel="nofollow"
-        aria-label="Home"
+        aria-label={t("巴士到站預報")}
       >
-        {onlineStatus === "online" && <Box sx={appTitleSx} />}
+        {onlineStatus === "online" && <Box sx={appTitleSx} aria-hidden="true" />}
         {onlineStatus === "offline" && (
-          <IconButton>
+          <IconButton aria-label={t("離線")}>
             <WifiOffIcon />
           </IconButton>
         )}
@@ -173,10 +173,10 @@ const Header = () => {
             }}
             sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
             role="button"
-            aria-label="Search Route"
+            aria-label={t("搜尋路線")}
             tabIndex={0}
           >
-            <SearchIcon fontSize="small" sx={{ opacity: 0.8 }} />
+            <SearchIcon fontSize="small" sx={{ opacity: 0.8 }} aria-hidden="true" />
           </Box>
         }
         onChange={(e) => {
@@ -197,9 +197,9 @@ const Header = () => {
           }
           navigate(`/${language}/board`, { replace: true });
         }}
-        aria-label="search input, you may enter the route directly"
+        aria-label={t("搜尋路線")}
       />
-      <Box sx={weatherPanelSx}>
+      <Box sx={weatherPanelSx} aria-label={t("天氣資訊")} role="group">
         {weatherCodes.slice(0, 2).map((code) => (
           <Avatar
             onClick={() =>
@@ -213,13 +213,14 @@ const Header = () => {
             variant="square"
             src={WeatherIcons[code]}
             sx={weatherImg}
+            alt={code}
           />
         ))}
       </Box>
       <Box sx={funcPanelSx}>
         {geoPermission === "granted" && (
           <IconButton
-            aria-label="relocate"
+            aria-label={t("重新定位")}
             onClick={() => relocateGeolocation()}
             size="small"
           >
@@ -233,7 +234,7 @@ const Header = () => {
           variant="text"
           disableElevation
           disableRipple
-          aria-label="Language button"
+          aria-label={t("切換語言")}
         >
           {language !== "zh" ? "繁" : "En"}
         </Button>
@@ -242,7 +243,7 @@ const Header = () => {
             vibrate(vibrateDuration);
             toggleColorMode();
           }}
-          aria-label="color theme button"
+          aria-label={t("切換顏色主題")}
         >
           {_colorMode === "system" && (
             <SettingsBrightnessIcon fontSize="small" />
@@ -254,7 +255,7 @@ const Header = () => {
           component={Link}
           to={`/${language}/settings`}
           rel="nofollow"
-          aria-label="settings button"
+          aria-label={t("設定")}
         >
           <SettingsIcon fontSize="small" />
         </IconButton>

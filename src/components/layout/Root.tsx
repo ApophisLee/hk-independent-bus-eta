@@ -14,7 +14,7 @@ const Root = () => {
       <CssBaseline />
       <Header />
       <Suspense fallback={null}>
-        <Box sx={mainSx}>
+        <Box component="main" sx={mainSx}>
           <GACookieConsent />
           <Outlet />
         </Box>

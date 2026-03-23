@@ -180,12 +180,15 @@ const SuccinctTimeReport = ({
         )}
         {mode === "order" && (
           <Box sx={iconContainerSx}>
-            <ReorderIcon />
+            <ReorderIcon aria-hidden="true" />
           </Box>
         )}
         {mode === "edit" && (
           <Box sx={iconContainerSx}>
-            <IconButton onClick={(e) => onDelete && onDelete(e)}>
+            <IconButton
+              aria-label={t("刪除")}
+              onClick={(e) => onDelete && onDelete(e)}
+            >
               <DeleteIcon />
             </IconButton>
           </Box>
