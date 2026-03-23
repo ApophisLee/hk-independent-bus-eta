@@ -110,10 +110,6 @@ export interface AppState {
    * Is input currently being entered
    */
   isSearching: boolean;
-  /**
-   * Accessibility mode for screen readers
-   */
-  accessibilityMode: boolean;
 }
 
 interface AppContextValue extends AppState {
@@ -151,8 +147,6 @@ interface AppContextValue extends AppState {
   importAppState: (appState: AppState) => void;
   setSearchRange: (searchRange: number) => void;
   setIsSearching: (searching: boolean) => void;
-  toggleAccessibilityMode: () => void;
-  setAccessibilityMode: (accessibilityMode: boolean) => void;
   openUrl: (url: string) => void;
   // for React Native Context
   setGeoPermission: (geoPermission: AppState["geoPermission"]) => void;
@@ -279,9 +273,6 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
         localStorage.getItem("searchRange") ?? `${DEFAULT_SEARCH_RANGE}`
       ),
       isSearching: false,
-      accessibilityMode: JSON.parse(
-        localStorage.getItem("accessibilityMode") ?? "false"
-      ),
     };
   };
   const geolocation = useRef<GeoLocation>(_geolocation);
@@ -627,22 +618,6 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     );
   }, []);
 
-  const toggleAccessibilityMode = useCallback(() => {
-    setStateRaw(
-      produce((state: State) => {
-        state.accessibilityMode = !state.accessibilityMode;
-      })
-    );
-  }, []);
-
-  const setAccessibilityMode = useCallback((accessibilityMode: boolean) => {
-    setStateRaw(
-      produce((state: State) => {
-        state.accessibilityMode = accessibilityMode;
-      })
-    );
-  }, []);
-
   const openUrl = useCallback((url: string) => {
     // @ts-expect-error harmonyBridger exists in Harmony OS only
     if (typeof harmonyBridger !== "undefined") {
@@ -811,13 +786,6 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     localStorage.setItem("searchRange", JSON.stringify(state.searchRange));
   }, [state.searchRange]);
 
-  useEffect(() => {
-    localStorage.setItem(
-      "accessibilityMode",
-      JSON.stringify(state.accessibilityMode)
-    );
-  }, [state.accessibilityMode]);
-
   const contextValue: AppContextValue = useMemo(
     () => ({
       ...state,
@@ -851,8 +819,6 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
       setGeoPermission,
       setSearchRange,
       setIsSearching,
-      toggleAccessibilityMode,
-      setAccessibilityMode,
       openUrl,
     }),
     [
@@ -886,8 +852,6 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
       setGeoPermission,
       setSearchRange,
       setIsSearching,
-      toggleAccessibilityMode,
-      setAccessibilityMode,
       openUrl,
     ]
   );

@@ -15,13 +15,11 @@ import { useParams } from "react-router-dom";
 import useLanguage from "../hooks/useTranslation";
 import CollectionContext from "../CollectionContext";
 import DbContext from "../context/DbContext";
-import AppContext from "../context/AppContext";
 import NoticeCard from "../components/layout/NoticeCard";
 
 const Home = () => {
   const { AppTitle } = useContext(DbContext);
   const { collections } = useContext(CollectionContext);
-  const { accessibilityMode } = useContext(AppContext);
   const { t } = useTranslation();
   const language = useLanguage();
   const { collectionName } = useParams();
@@ -59,12 +57,10 @@ const Home = () => {
       <Typography component="h2" style={visuallyHidden}>
         {t("home-page-description")}
       </Typography>
-      {!accessibilityMode && (
-        <HomeTabbar homeTab={homeTab} onChangeTab={handleTabChange} />
-      )}
+      <HomeTabbar homeTab={homeTab} onChangeTab={handleTabChange} />
       <NoticeCard />
-      {!accessibilityMode && <BadWeatherCard />}
-      {!accessibilityMode && <DbRenewReminder />}
+      <BadWeatherCard />
+      <DbRenewReminder />
       <SwipeableList
         ref={swipeableList}
         homeTab={homeTab}
