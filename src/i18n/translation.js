@@ -199,6 +199,7 @@ const resources = {
       無障礙模式: "Accessibility Mode",
       無障礙模式已開啟: "Accessibility mode on",
       無障礙模式已關閉: "Accessibility mode off",
+      頁面導航: "Page navigation",
     },
   },
   zh: {

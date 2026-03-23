@@ -11,7 +11,7 @@ const useAccessibilityDetection = (): void => {
   const { accessibilityMode, setAccessibilityMode } = useContext(AppContext);
 
   const handleNativeMessage = useCallback(
-    (event: Event & { data?: string }) => {
+    (event: MessageEvent) => {
       try {
         const data = JSON.parse(event.data ?? "{}");
         if (data.type === "voiceover" && typeof data.value === "boolean") {
@@ -46,9 +46,15 @@ const useAccessibilityDetection = (): void => {
 
   // Listen for voiceover messages from React Native wrapper.
   useEffect(() => {
-    window.addEventListener("message", handleNativeMessage);
+    window.addEventListener(
+      "message",
+      handleNativeMessage as EventListener
+    );
     return () => {
-      window.removeEventListener("message", handleNativeMessage);
+      window.removeEventListener(
+        "message",
+        handleNativeMessage as EventListener
+      );
     };
   }, [handleNativeMessage]);
 };
