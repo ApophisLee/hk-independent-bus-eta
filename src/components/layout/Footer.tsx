@@ -12,6 +12,7 @@ import NearMeIcon from "@mui/icons-material/NearMe";
 import FlagCircleIcon from "@mui/icons-material/FlagCircle";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import AppContext from "../../context/AppContext";
@@ -23,7 +24,7 @@ const Footer = () => {
   const { t } = useTranslation();
   const language = useLanguage();
   const location = useLocation();
-  const { vibrateDuration } = useContext(AppContext);
+  const { vibrateDuration, accessibilityMode } = useContext(AppContext);
   const { isRemind } = useContext(EmotionContext);
 
   const navigate = useNavigate();
@@ -42,6 +43,8 @@ const Footer = () => {
         value={location.pathname.replace(/(.*)\/[0-9]*?$/, "$1")}
         showLabels={true}
         sx={rootSx}
+        role="navigation"
+        aria-label={t("首頁")}
       >
         <BottomNavigationAction
           label={t("首頁")}
@@ -51,32 +54,38 @@ const Footer = () => {
           value={`/${language}`}
           icon={<HomeIcon />}
         />
-        <BottomNavigationAction
-          label={t("車站")}
-          component={Link}
-          to={`/${language}/stops`}
-          onClick={(e) => handleClick(`/${language}/stops`, e)}
-          value={`/${language}/stops`}
-          icon={<FlagCircleIcon />}
-        />
-        <BottomNavigationAction
-          label={t("搜尋")}
-          component={Link}
-          to={`/${language}/board`}
-          onClick={(e) => handleClick(`/${language}/board`, e)}
-          value={`/${language}/board`}
-          icon={<SearchIcon />}
-        />
-        <BottomNavigationAction
-          label={t("規劃")}
-          component={Link}
-          to={`/${language}/search`}
-          onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
-            handleClick(`/${language}/search`, e)
-          }
-          value={`/${language}/search`}
-          icon={<NearMeIcon />}
-        />
+        {!accessibilityMode && (
+          <BottomNavigationAction
+            label={t("車站")}
+            component={Link}
+            to={`/${language}/stops`}
+            onClick={(e) => handleClick(`/${language}/stops`, e)}
+            value={`/${language}/stops`}
+            icon={<FlagCircleIcon />}
+          />
+        )}
+        {!accessibilityMode && (
+          <BottomNavigationAction
+            label={t("搜尋")}
+            component={Link}
+            to={`/${language}/board`}
+            onClick={(e) => handleClick(`/${language}/board`, e)}
+            value={`/${language}/board`}
+            icon={<SearchIcon />}
+          />
+        )}
+        {!accessibilityMode && (
+          <BottomNavigationAction
+            label={t("規劃")}
+            component={Link}
+            to={`/${language}/search`}
+            onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
+              handleClick(`/${language}/search`, e)
+            }
+            value={`/${language}/search`}
+            icon={<NearMeIcon />}
+          />
+        )}
         <BottomNavigationAction
           label={t("通告")}
           component={Link}
@@ -87,27 +96,41 @@ const Footer = () => {
           value={`/${language}/notice`}
           icon={<NewspaperIcon />}
         />
-        <BottomNavigationAction
-          label={t("Heart")}
-          component={Link}
-          to={`/${language}/emotion`}
-          onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
-            handleClick(`/${language}/emotion`, e)
-          }
-          value={`/${language}/emotion`}
-          icon={
-            <Badge
-              invisible={!isRemind || location.pathname.endsWith("/emotion")}
-              color="error"
-              variant="dot"
-            >
-              <FavoriteIcon />
-            </Badge>
-          }
-        />
+        {!accessibilityMode && (
+          <BottomNavigationAction
+            label={t("Heart")}
+            component={Link}
+            to={`/${language}/emotion`}
+            onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
+              handleClick(`/${language}/emotion`, e)
+            }
+            value={`/${language}/emotion`}
+            icon={
+              <Badge
+                invisible={!isRemind || location.pathname.endsWith("/emotion")}
+                color="error"
+                variant="dot"
+              >
+                <FavoriteIcon />
+              </Badge>
+            }
+          />
+        )}
+        {accessibilityMode && (
+          <BottomNavigationAction
+            label={t("設定")}
+            component={Link}
+            to={`/${language}/settings`}
+            onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
+              handleClick(`/${language}/settings`, e)
+            }
+            value={`/${language}/settings`}
+            icon={<SettingsIcon />}
+          />
+        )}
       </BottomNavigation>
     ),
-    [location.pathname, language, t, isRemind, handleClick]
+    [location.pathname, language, t, isRemind, handleClick, accessibilityMode]
   );
 };
 

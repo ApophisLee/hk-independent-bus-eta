@@ -22,7 +22,8 @@ const SuccinctEtas = ({
 }: SuccinctEtasProps) => {
   const { t } = useTranslation();
   const language = useLanguage();
-  const { etaFormat, annotateScheduled, platformMode } = useContext(AppContext);
+  const { etaFormat, annotateScheduled, platformMode, accessibilityMode } =
+    useContext(AppContext);
   const {
     db: { routeList },
   } = useContext(DbContext);
@@ -121,7 +122,12 @@ const SuccinctEtas = ({
   };
 
   return (
-    <Box display="flex" flexDirection="column" textAlign="right">
+    <Box
+      display="flex"
+      flexDirection="column"
+      textAlign="right"
+      {...(accessibilityMode ? { "aria-live": "polite", "aria-atomic": true } : {})}
+    >
       <Typography component="h5" color="textPrimary" sx={primarySx}>
         {etas ? getEtaString(etas[0], 0, true) : ""}
       </Typography>

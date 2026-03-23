@@ -28,6 +28,7 @@ const TimeReport = ({
   const {
     db: { routeList, stopList },
   } = useContext(DbContext);
+  const { accessibilityMode } = useContext(AppContext);
   const etas = useEtas(`${routeId}/${seq}`);
 
   const { route, co, stops } = routeList[routeId];
@@ -77,7 +78,10 @@ const TimeReport = ({
   }
 
   return (
-    <Box sx={containerSx}>
+    <Box
+      sx={containerSx}
+      {...(accessibilityMode ? { "aria-live": "polite", "aria-atomic": true } : {})}
+    >
       {showStopName && (
         <Typography variant="caption">
           {stopList[stopId].name[language]}

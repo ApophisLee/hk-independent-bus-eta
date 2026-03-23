@@ -38,6 +38,7 @@ import {
   SecurityUpdate as SecurityUpdateIcon,
   Watch as WatchIcon,
   Map as MapIcon,
+  Accessibility as AccessibilityIcon,
 } from "@mui/icons-material";
 import { visuallyHidden } from "@mui/utils";
 import { useTranslation } from "react-i18next";
@@ -70,6 +71,8 @@ const Settings = () => {
     vibrateDuration,
     toggleAnalytics,
     analytics,
+    accessibilityMode,
+    toggleAccessibilityMode,
     openUrl,
   } = useContext(AppContext);
   const { debug, toggleDebug } = useContext(ReactNativeContext);
@@ -253,6 +256,22 @@ const Settings = () => {
           <ListItemText
             primary={t("個性化設定")}
             secondary={t("日夜模式、時間格式、路線次序等")}
+          />
+        </ListItemButton>
+        <ListItemButton
+          onClick={() => {
+            vibrate(vibrateDuration);
+            toggleAccessibilityMode();
+          }}
+        >
+          <ListItemAvatar>
+            <Avatar>
+              <AccessibilityIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={t("無障礙模式")}
+            secondary={t(accessibilityMode ? "開啟" : "關閉")}
           />
         </ListItemButton>
         <ListItemButton

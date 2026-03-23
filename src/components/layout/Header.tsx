@@ -41,6 +41,7 @@ const Header = () => {
     toggleColorMode,
     isSearching,
     setIsSearching,
+    accessibilityMode,
     openUrl,
   } = useContext(AppContext);
   const {
@@ -199,23 +200,25 @@ const Header = () => {
         }}
         aria-label="search input, you may enter the route directly"
       />
-      <Box sx={weatherPanelSx}>
-        {weatherCodes.slice(0, 2).map((code) => (
-          <Avatar
-            onClick={() =>
-              openUrl(
-                `https://www.hko.gov.hk/${
-                  language === "zh" ? "tc" : "en"
-                }/detail.htm`
-              )
-            }
-            key={code}
-            variant="square"
-            src={WeatherIcons[code]}
-            sx={weatherImg}
-          />
-        ))}
-      </Box>
+      {!accessibilityMode && (
+        <Box sx={weatherPanelSx}>
+          {weatherCodes.slice(0, 2).map((code) => (
+            <Avatar
+              onClick={() =>
+                openUrl(
+                  `https://www.hko.gov.hk/${
+                    language === "zh" ? "tc" : "en"
+                  }/detail.htm`
+                )
+              }
+              key={code}
+              variant="square"
+              src={WeatherIcons[code]}
+              sx={weatherImg}
+            />
+          ))}
+        </Box>
+      )}
       <Box sx={funcPanelSx}>
         {geoPermission === "granted" && (
           <IconButton
@@ -237,19 +240,21 @@ const Header = () => {
         >
           {language !== "zh" ? "繁" : "En"}
         </Button>
-        <IconButton
-          onClick={() => {
-            vibrate(vibrateDuration);
-            toggleColorMode();
-          }}
-          aria-label="color theme button"
-        >
-          {_colorMode === "system" && (
-            <SettingsBrightnessIcon fontSize="small" />
-          )}
-          {_colorMode === "light" && <WbSunnyIcon fontSize="small" />}
-          {_colorMode === "dark" && <DarkModeIcon fontSize="small" />}
-        </IconButton>
+        {!accessibilityMode && (
+          <IconButton
+            onClick={() => {
+              vibrate(vibrateDuration);
+              toggleColorMode();
+            }}
+            aria-label="color theme button"
+          >
+            {_colorMode === "system" && (
+              <SettingsBrightnessIcon fontSize="small" />
+            )}
+            {_colorMode === "light" && <WbSunnyIcon fontSize="small" />}
+            {_colorMode === "dark" && <DarkModeIcon fontSize="small" />}
+          </IconButton>
+        )}
         <IconButton
           component={Link}
           to={`/${language}/settings`}
