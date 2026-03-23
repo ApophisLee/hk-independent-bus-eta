@@ -271,7 +271,11 @@ const Settings = () => {
           </ListItemAvatar>
           <ListItemText
             primary={t("無障礙模式")}
-            secondary={t(accessibilityMode ? "開啟" : "關閉")}
+            secondary={
+              t(accessibilityMode ? "開啟" : "關閉") +
+              " - " +
+              t("簡化介面以配合屏幕閱讀器使用")
+            }
           />
         </ListItemButton>
         <ListItemButton

@@ -44,7 +44,7 @@ const Footer = () => {
         showLabels={true}
         sx={rootSx}
         role="navigation"
-        aria-label={t("首頁")}
+        aria-label={t("底部導航")}
       >
         <BottomNavigationAction
           label={t("首頁")}

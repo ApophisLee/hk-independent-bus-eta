@@ -198,6 +198,7 @@ const resources = {
       地圖資源: "Map Resources",
       無障礙模式: "Accessibility Mode",
       "簡化介面以配合屏幕閱讀器使用": "Simplify UI for screen reader usage",
+      底部導航: "Bottom Navigation",
     },
   },
   zh: {
