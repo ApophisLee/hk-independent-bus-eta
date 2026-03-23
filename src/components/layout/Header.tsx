@@ -138,7 +138,7 @@ const Header = () => {
   };
 
   return (
-    <Toolbar sx={rootSx}>
+    <Toolbar component="header" sx={rootSx}>
       <Link
         to={`/${language}`}
         onClick={(e) => {
@@ -151,7 +151,7 @@ const Header = () => {
       >
         {onlineStatus === "online" && <Box sx={appTitleSx} />}
         {onlineStatus === "offline" && (
-          <IconButton>
+          <IconButton aria-label={t("離線")}>
             <WifiOffIcon />
           </IconButton>
         )}
@@ -171,9 +171,15 @@ const Header = () => {
             onClick={() => {
               setIsSearching(!isSearching);
             }}
+            onKeyDown={(e: React.KeyboardEvent) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setIsSearching(!isSearching);
+              }
+            }}
             sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
             role="button"
-            aria-label="Search Route"
+            aria-label={t("搜尋路線")}
             tabIndex={0}
           >
             <SearchIcon fontSize="small" sx={{ opacity: 0.8 }} />
@@ -212,14 +218,17 @@ const Header = () => {
             key={code}
             variant="square"
             src={WeatherIcons[code]}
+            alt={t("天氣") + ` ${code}`}
             sx={weatherImg}
+            role="link"
+            aria-label={t("天氣資訊")}
           />
         ))}
       </Box>
       <Box sx={funcPanelSx}>
         {geoPermission === "granted" && (
           <IconButton
-            aria-label="relocate"
+            aria-label={t("重新定位")}
             onClick={() => relocateGeolocation()}
             size="small"
           >
@@ -233,7 +242,7 @@ const Header = () => {
           variant="text"
           disableElevation
           disableRipple
-          aria-label="Language button"
+          aria-label={t("切換語言")}
         >
           {language !== "zh" ? "繁" : "En"}
         </Button>
@@ -242,7 +251,7 @@ const Header = () => {
             vibrate(vibrateDuration);
             toggleColorMode();
           }}
-          aria-label="color theme button"
+          aria-label={t("切換顏色主題")}
         >
           {_colorMode === "system" && (
             <SettingsBrightnessIcon fontSize="small" />
@@ -254,7 +263,7 @@ const Header = () => {
           component={Link}
           to={`/${language}/settings`}
           rel="nofollow"
-          aria-label="settings button"
+          aria-label={t("設定")}
         >
           <SettingsIcon fontSize="small" />
         </IconButton>

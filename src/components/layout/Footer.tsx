@@ -39,6 +39,8 @@ const Footer = () => {
   return useMemo(
     () => (
       <BottomNavigation
+        component="nav"
+        aria-label={t("主選單")}
         value={location.pathname.replace(/(.*)\/[0-9]*?$/, "$1")}
         showLabels={true}
         sx={rootSx}

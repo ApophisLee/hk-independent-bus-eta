@@ -7,6 +7,7 @@ import { type BoardTabType } from "../../@types/types";
 import { TRANSPORT_SEARCH_OPTIONS } from "../../constants";
 import { RouteList } from "hk-bus-eta";
 import DbContext from "../../context/DbContext";
+import { useTranslation } from "react-i18next";
 
 interface KeyButtonProps {
   k: string;
@@ -16,6 +17,8 @@ interface KeyButtonProps {
 }
 
 const KeyButton = ({ k, onClick, disabled = false, sx }: KeyButtonProps) => {
+  const { t } = useTranslation();
+  const ariaLabel = k === "b" ? t("倒退") : k === "c" ? t("清除") : k;
   return (
     <Button
       size="large"
@@ -24,6 +27,7 @@ const KeyButton = ({ k, onClick, disabled = false, sx }: KeyButtonProps) => {
       onClick={() => onClick(k)}
       disabled={disabled}
       disableRipple
+      aria-label={ariaLabel}
     >
       {k === "b" ? (
         <BackspaceOutlinedIcon />
@@ -39,9 +43,10 @@ const KeyButton = ({ k, onClick, disabled = false, sx }: KeyButtonProps) => {
 const RouteNumPad = ({ possibleChar }: { possibleChar: string[] }) => {
   const { numPadOrder, searchRoute, updateSearchRouteByButton } =
     useContext(AppContext);
+  const { t } = useTranslation();
 
   return (
-    <Grid container spacing={0}>
+    <Grid container spacing={0} role="group" aria-label={t("數字鍵盤")}>
       {numPadOrder.split("").map((k) => (
         <Grid item xs={4} key={"input-" + k}>
           <KeyButton
@@ -62,9 +67,10 @@ const RouteNumPad = ({ possibleChar }: { possibleChar: string[] }) => {
 
 const RouteAlphabetPad = ({ possibleChar }: { possibleChar: string[] }) => {
   const { updateSearchRouteByButton } = useContext(AppContext);
+  const { t } = useTranslation();
 
   return (
-    <Grid container spacing={1}>
+    <Grid container spacing={1} role="group" aria-label={t("字母鍵盤")}>
       {possibleChar
         .filter((k) => isNaN(parseInt(k, 10)))
         .map((k) => (
@@ -85,6 +91,7 @@ const RouteInputPad = ({ boardTab }: { boardTab: BoardTabType }) => {
   const {
     db: { routeList },
   } = useContext(DbContext);
+  const { t } = useTranslation();
 
   const possibleChar = getPossibleChar(searchRoute, routeList, boardTab);
 
@@ -94,7 +101,7 @@ const RouteInputPad = ({ boardTab }: { boardTab: BoardTabType }) => {
   }
 
   return (
-    <Box sx={rootSx} padding={padding}>
+    <Box sx={rootSx} padding={padding} role="group" aria-label={t("路線輸入鍵盤")}>
       <Box sx={numPadContainerSx} padding={padding}>
         <RouteNumPad possibleChar={possibleChar} />
       </Box>
