@@ -174,7 +174,6 @@ const resources = {
       通告: "Notice",
       離線: "Offline",
       搜尋路線: "Search route",
-      天氣: "Weather",
       天氣資訊: "Weather information",
       重新定位: "Relocate",
       切換語言: "Switch language",

@@ -207,7 +207,7 @@ const Header = () => {
       />
       <Box sx={weatherPanelSx}>
         {weatherCodes.slice(0, 2).map((code) => (
-          <Avatar
+          <IconButton
             onClick={() =>
               openUrl(
                 `https://www.hko.gov.hk/${
@@ -216,13 +216,16 @@ const Header = () => {
               )
             }
             key={code}
-            variant="square"
-            src={WeatherIcons[code]}
-            alt={t("天氣") + ` ${code}`}
-            sx={weatherImg}
-            role="link"
             aria-label={t("天氣資訊")}
-          />
+            sx={{ p: 0 }}
+          >
+            <Avatar
+              variant="square"
+              src={WeatherIcons[code]}
+              alt=""
+              sx={weatherImg}
+            />
+          </IconButton>
         ))}
       </Box>
       <Box sx={funcPanelSx}>
