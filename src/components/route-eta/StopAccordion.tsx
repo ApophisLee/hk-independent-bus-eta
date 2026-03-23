@@ -24,6 +24,7 @@ import { toProperCase } from "../../utils";
 import TimeReport from "./TimeReport";
 import { SharingModalProps } from "./SharingModal";
 import ReactNativeContext from "../../context/ReactNativeContext";
+import AppContext from "../../context/AppContext";
 import useLanguage from "../../hooks/useTranslation";
 import DbContext from "../../context/DbContext";
 import CollectionContext from "../../CollectionContext";
@@ -58,6 +59,7 @@ const StopAccordion = React.forwardRef<HTMLDivElement, StopAccordionProps>(
     const { alarmStopId, toggleStopAlarm } = useContext(ReactNativeContext);
     const { isStopAlarm } = useContext(ReactNativeContext);
     const { pinnedEtas, togglePinnedEta } = useContext(PinnedEtasContext);
+    const { accessibilityMode } = useContext(AppContext);
     const { t } = useTranslation();
     const language = useLanguage();
     const { fares, faresHoliday } = routeList[routeId];
@@ -134,47 +136,53 @@ const StopAccordion = React.forwardRef<HTMLDivElement, StopAccordionProps>(
                   )}
                 </IconButton>
               )}
-              <IconButton
-                aria-label="stop-info"
-                onClick={onStopInfoClick}
-                style={{ background: "transparent" }}
-                size="large"
-              >
-                <InfoIcon />
-              </IconButton>
-              <IconButton
-                aria-label="pin"
-                onClick={() => togglePinnedEta(targetRouteId)}
-                style={{ backgroundColor: "transparent" }}
-                size="large"
-              >
-                {pinnedEtas.includes(targetRouteId) ? (
-                  <PushPinIcon />
-                ) : (
-                  <PushPinOutlinedIcon />
-                )}
-              </IconButton>
+              {!accessibilityMode && (
+                <IconButton
+                  aria-label="stop-info"
+                  onClick={onStopInfoClick}
+                  style={{ background: "transparent" }}
+                  size="large"
+                >
+                  <InfoIcon />
+                </IconButton>
+              )}
+              {!accessibilityMode && (
+                <IconButton
+                  aria-label="pin"
+                  onClick={() => togglePinnedEta(targetRouteId)}
+                  style={{ backgroundColor: "transparent" }}
+                  size="large"
+                >
+                  {pinnedEtas.includes(targetRouteId) ? (
+                    <PushPinIcon />
+                  ) : (
+                    <PushPinOutlinedIcon />
+                  )}
+                </IconButton>
+              )}
             </Box>
-            <Box>
-              <IconButton
-                aria-label="share"
-                onClick={handleShareClick}
-                style={{ backgroundColor: "transparent" }}
-                size="large"
-              >
-                <ShareIcon />
-              </IconButton>
-              <IconButton
-                aria-label="favourite"
-                onClick={() => {
-                  setCollectionDrawerRoute(targetRouteId);
-                }}
-                style={{ backgroundColor: "transparent" }}
-                size="large"
-              >
-                {isStarred ? <StarIcon sx={starSx} /> : <StarBorderIcon />}
-              </IconButton>
-            </Box>
+            {!accessibilityMode && (
+              <Box>
+                <IconButton
+                  aria-label="share"
+                  onClick={handleShareClick}
+                  style={{ backgroundColor: "transparent" }}
+                  size="large"
+                >
+                  <ShareIcon />
+                </IconButton>
+                <IconButton
+                  aria-label="favourite"
+                  onClick={() => {
+                    setCollectionDrawerRoute(targetRouteId);
+                  }}
+                  style={{ backgroundColor: "transparent" }}
+                  size="large"
+                >
+                  {isStarred ? <StarIcon sx={starSx} /> : <StarBorderIcon />}
+                </IconButton>
+              </Box>
+            )}
           </Box>
         </AccordionDetails>
       </Accordion>

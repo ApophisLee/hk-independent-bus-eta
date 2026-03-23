@@ -196,6 +196,10 @@ const resources = {
       DRL: "Disneyland Resort Line",
       "支援 WearOS 及 WatchOS 平台": "Support WearOS & WatchOS",
       地圖資源: "Map Resources",
+      無障礙模式: "Accessibility Mode",
+      無障礙模式已開啟: "Accessibility mode on",
+      無障礙模式已關閉: "Accessibility mode off",
+      頁面導航: "Page navigation",
     },
   },
   zh: {
