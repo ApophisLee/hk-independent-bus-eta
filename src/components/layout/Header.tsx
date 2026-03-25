@@ -147,13 +147,17 @@ const Header = () => {
           navigate(`/${language}`);
         }}
         rel="nofollow"
-        aria-label="Home"
+        aria-label={
+          onlineStatus === "offline"
+            ? `${t("首頁")} - ${t("離線")}`
+            : t("首頁")
+        }
       >
         {onlineStatus === "online" && <Box sx={appTitleSx} />}
         {onlineStatus === "offline" && (
-          <IconButton>
-            <WifiOffIcon />
-          </IconButton>
+          <Box component="span" sx={offlineIconSx}>
+            <WifiOffIcon aria-hidden="true" />
+          </Box>
         )}
         <Typography component="h1" style={visuallyHidden}>
           {t("巴士到站預報")}
@@ -173,10 +177,10 @@ const Header = () => {
             }}
             sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
             role="button"
-            aria-label="Search Route"
+            aria-label={t("搜尋路線")}
             tabIndex={0}
           >
-            <SearchIcon fontSize="small" sx={{ opacity: 0.8 }} />
+            <SearchIcon fontSize="small" sx={{ opacity: 0.8 }} aria-hidden="true" />
           </Box>
         }
         onChange={(e) => {
@@ -197,11 +201,12 @@ const Header = () => {
           }
           navigate(`/${language}/board`, { replace: true });
         }}
-        aria-label="search input, you may enter the route directly"
+        aria-label={t("搜尋路線")}
       />
       <Box sx={weatherPanelSx}>
         {weatherCodes.slice(0, 2).map((code) => (
-          <Avatar
+          <IconButton
+            aria-label={t("天氣資訊")}
             onClick={() =>
               openUrl(
                 `https://www.hko.gov.hk/${
@@ -210,20 +215,27 @@ const Header = () => {
               )
             }
             key={code}
-            variant="square"
-            src={WeatherIcons[code]}
-            sx={weatherImg}
-          />
+            size="small"
+            sx={weatherButtonSx}
+          >
+            <Avatar
+              variant="square"
+              src={WeatherIcons[code]}
+              sx={weatherImg}
+              imgProps={{ alt: "" }}
+              aria-hidden="true"
+            />
+          </IconButton>
         ))}
       </Box>
       <Box sx={funcPanelSx}>
         {geoPermission === "granted" && (
           <IconButton
-            aria-label="relocate"
+            aria-label={t("重新定位")}
             onClick={() => relocateGeolocation()}
             size="small"
           >
-            <LocationOnIcon />
+            <LocationOnIcon aria-hidden="true" />
           </IconButton>
         )}
         <Button
@@ -233,7 +245,7 @@ const Header = () => {
           variant="text"
           disableElevation
           disableRipple
-          aria-label="Language button"
+          aria-label={t("切換語言")}
         >
           {language !== "zh" ? "繁" : "En"}
         </Button>
@@ -242,21 +254,25 @@ const Header = () => {
             vibrate(vibrateDuration);
             toggleColorMode();
           }}
-          aria-label="color theme button"
+          aria-label={t("切換顏色主題")}
         >
           {_colorMode === "system" && (
-            <SettingsBrightnessIcon fontSize="small" />
+            <SettingsBrightnessIcon fontSize="small" aria-hidden="true" />
           )}
-          {_colorMode === "light" && <WbSunnyIcon fontSize="small" />}
-          {_colorMode === "dark" && <DarkModeIcon fontSize="small" />}
+          {_colorMode === "light" && (
+            <WbSunnyIcon fontSize="small" aria-hidden="true" />
+          )}
+          {_colorMode === "dark" && (
+            <DarkModeIcon fontSize="small" aria-hidden="true" />
+          )}
         </IconButton>
         <IconButton
           component={Link}
           to={`/${language}/settings`}
           rel="nofollow"
-          aria-label="settings button"
+          aria-label={t("設定")}
         >
-          <SettingsIcon fontSize="small" />
+          <SettingsIcon fontSize="small" aria-hidden="true" />
         </IconButton>
       </Box>
     </Toolbar>
@@ -304,6 +320,11 @@ const weatherPanelSx: SxProps<Theme> = {
   alignContent: "center",
 };
 
+const weatherButtonSx: SxProps<Theme> = {
+  p: 0,
+  borderRadius: 0,
+};
+
 const funcPanelSx: SxProps<Theme> = {
   display: "flex",
   alignItems: "center",
@@ -324,4 +345,11 @@ const weatherImg: SxProps<Theme> = {
   height: 24,
   width: 24,
   m: 1,
+};
+
+const offlineIconSx: SxProps<Theme> = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  p: 1,
 };

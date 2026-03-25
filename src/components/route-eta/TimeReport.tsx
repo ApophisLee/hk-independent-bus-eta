@@ -1,6 +1,7 @@
 import { useContext, useMemo } from "react";
 import { Box, SxProps, Theme, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { visuallyHidden } from "@mui/utils";
 import AppContext from "../../context/AppContext";
 import { useEtas } from "../../hooks/useEtas";
 import { LinearProgress } from "../Progress";
@@ -28,7 +29,7 @@ const TimeReport = ({
   const {
     db: { routeList, stopList },
   } = useContext(DbContext);
-  const etas = useEtas(`${routeId}/${seq}`);
+  const { etas, updatedAt } = useEtas(`${routeId}/${seq}`);
 
   const { route, co, stops } = routeList[routeId];
   const stopId = Object.values(stops)[0][seq];
@@ -68,6 +69,11 @@ const TimeReport = ({
     return null;
   }, [etas, co, stops, stopId, t, language]);
 
+  const refreshAnnouncement = useMemo(() => {
+    if (updatedAt === null) return "";
+    return `${t("到站預報已更新")}：${formatRefreshTime(updatedAt, language)}`;
+  }, [updatedAt, language, t]);
+
   if (etas == null) {
     return (
       <Box sx={containerSx}>
@@ -77,7 +83,12 @@ const TimeReport = ({
   }
 
   return (
-    <Box sx={containerSx}>
+    <Box sx={containerSx} aria-live="polite" aria-atomic="true">
+      {refreshAnnouncement && (
+        <Typography component="p" sx={visuallyHidden} role="status">
+          {refreshAnnouncement}
+        </Typography>
+      )}
       {showStopName && (
         <Typography variant="caption">
           {stopList[stopId].name[language]}
@@ -137,7 +148,8 @@ const EtaLine = ({
 
   const exactTimeJsx = (
     <Box
-      component="span"
+      component="time"
+      dateTime={eta}
       sx={etaFormat !== "exact" ? { fontSize: "0.9em" } : {}}
     >
       {eta.slice(11, 16)}
@@ -275,6 +287,13 @@ const EtaRemark = ({
 };
 
 export default TimeReport;
+
+const formatRefreshTime = (updatedAt: number, language: "zh" | "en") =>
+  new Intl.DateTimeFormat(language === "zh" ? "zh-HK" : "en-HK", {
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+  }).format(updatedAt);
 
 const waitTimeSx: SxProps<Theme> = {
   fontWeight: "700",

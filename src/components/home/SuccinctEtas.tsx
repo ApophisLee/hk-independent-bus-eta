@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Box, SxProps, Theme, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { visuallyHidden } from "@mui/utils";
 import { useEtas } from "../../hooks/useEtas";
 import AppContext from "../../context/AppContext";
 import { Eta } from "hk-bus-eta";
@@ -26,9 +27,13 @@ const SuccinctEtas = ({
   const {
     db: { routeList },
   } = useContext(DbContext);
-  const _etas = useEtas(routeId, Boolean(value));
+  const { etas: _etas, updatedAt } = useEtas(routeId, Boolean(value));
   const etas = value ?? _etas;
   const isCoop = routeList[routeId.split("/")[0]].co.length > 1;
+  const refreshAnnouncement =
+    updatedAt === null
+      ? ""
+      : `${t("到站預報已更新")}：${formatRefreshTime(updatedAt, language)}`;
 
   const getEtaString = (
     eta: Eta | null,
@@ -67,7 +72,7 @@ const SuccinctEtas = ({
           <Typography variant="caption">{isCoop && t(eta.co)}&emsp;</Typography>
           {isScheduled && annotateScheduled && (
             <>
-              <ScheduleIcon sx={{ fontSize: "0.9em" }} />
+              <ScheduleIcon sx={{ fontSize: "0.9em" }} aria-hidden="true" />
               &nbsp;
             </>
           )}
@@ -80,7 +85,8 @@ const SuccinctEtas = ({
 
       const exactTimeJsx = (
         <Box
-          component="span"
+          component="time"
+          dateTime={eta.eta}
           sx={{ fontSize: etaFormat !== "exact" ? "0.9em" : "1rem" }}
         >
           {eta.eta.slice(11, 16)}
@@ -121,7 +127,18 @@ const SuccinctEtas = ({
   };
 
   return (
-    <Box display="flex" flexDirection="column" textAlign="right">
+    <Box
+      display="flex"
+      flexDirection="column"
+      textAlign="right"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      {refreshAnnouncement && (
+        <Typography component="p" sx={visuallyHidden} role="status">
+          {refreshAnnouncement}
+        </Typography>
+      )}
       <Typography component="h5" color="textPrimary" sx={primarySx}>
         {etas ? getEtaString(etas[0], 0, true) : ""}
       </Typography>
@@ -138,6 +155,8 @@ const SuccinctEtas = ({
 export const SingleTrainIcon = () => (
   // https://pictogrammers.com/library/mdi/icon/train-car-passenger-door/
   <svg
+    aria-hidden="true"
+    focusable="false"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
     style={{
@@ -157,6 +176,8 @@ export const DoubleTrainIcon = () => (
   // https://pictogrammers.com/library/mdi/icon/train-car-passenger-door/
   <>
     <svg
+      aria-hidden="true"
+      focusable="false"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       style={{
@@ -170,6 +191,8 @@ export const DoubleTrainIcon = () => (
       <path d="M21 7H3C1.9 7 1 7.9 1 9V17H2C2 18.11 2.9 19 4 19S6 18.11 6 17H18C18 18.11 18.9 19 20 19S22 18.11 22 17H23V9C23 7.9 22.11 7 21 7M7 12H3V9H7V12M11 16H9V9H11V16M15 16H13V9H15V16M21 12H17V9H21V12Z" />
     </svg>
     <svg
+      aria-hidden="true"
+      focusable="false"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       style={{
@@ -187,6 +210,13 @@ export const DoubleTrainIcon = () => (
 );
 
 export default SuccinctEtas;
+
+const formatRefreshTime = (updatedAt: number, language: "zh" | "en") =>
+  new Intl.DateTimeFormat(language === "zh" ? "zh-HK" : "en-HK", {
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+  }).format(updatedAt);
 
 const primarySx: SxProps<Theme> = {
   whiteSpace: "nowrap",
