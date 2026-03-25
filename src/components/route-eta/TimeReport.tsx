@@ -3,7 +3,11 @@ import { Box, SxProps, Theme, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { visuallyHidden } from "@mui/utils";
 import AppContext from "../../context/AppContext";
-import { useEtas } from "../../hooks/useEtas";
+import {
+  formatEtaRefreshTime,
+  formatDateTimeForAttribute,
+  useEtas,
+} from "../../hooks/useEtas";
 import { LinearProgress } from "../Progress";
 import { Eta, Terminal } from "hk-bus-eta";
 import { getPlatformSymbol, getLineColor } from "../../utils";
@@ -71,7 +75,7 @@ const TimeReport = ({
 
   const refreshAnnouncement = useMemo(() => {
     if (updatedAt === null) return "";
-    return `${t("到站預報已更新")}：${formatRefreshTime(updatedAt, language)}`;
+    return `${t("到站預報已更新")}：${formatEtaRefreshTime(updatedAt, language)}`;
   }, [updatedAt, language, t]);
 
   if (etas == null) {
@@ -85,7 +89,7 @@ const TimeReport = ({
   return (
     <Box sx={containerSx} aria-live="polite" aria-atomic="true">
       {refreshAnnouncement && (
-        <Typography component="p" sx={visuallyHidden} role="status">
+        <Typography component="p" sx={visuallyHidden}>
           {refreshAnnouncement}
         </Typography>
       )}
@@ -149,7 +153,7 @@ const EtaLine = ({
   const exactTimeJsx = (
     <Box
       component="time"
-      dateTime={eta}
+      dateTime={formatDateTimeForAttribute(eta)}
       sx={etaFormat !== "exact" ? { fontSize: "0.9em" } : {}}
     >
       {eta.slice(11, 16)}
@@ -287,13 +291,6 @@ const EtaRemark = ({
 };
 
 export default TimeReport;
-
-const formatRefreshTime = (updatedAt: number, language: "zh" | "en") =>
-  new Intl.DateTimeFormat(language === "zh" ? "zh-HK" : "en-HK", {
-    hour: "numeric",
-    minute: "2-digit",
-    second: "2-digit",
-  }).format(updatedAt);
 
 const waitTimeSx: SxProps<Theme> = {
   fontWeight: "700",

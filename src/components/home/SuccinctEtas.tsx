@@ -2,7 +2,11 @@ import { useContext } from "react";
 import { Box, SxProps, Theme, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { visuallyHidden } from "@mui/utils";
-import { useEtas } from "../../hooks/useEtas";
+import {
+  formatEtaRefreshTime,
+  formatDateTimeForAttribute,
+  useEtas,
+} from "../../hooks/useEtas";
 import AppContext from "../../context/AppContext";
 import { Eta } from "hk-bus-eta";
 import { Schedule as ScheduleIcon } from "@mui/icons-material";
@@ -33,7 +37,7 @@ const SuccinctEtas = ({
   const refreshAnnouncement =
     updatedAt === null
       ? ""
-      : `${t("到站預報已更新")}：${formatRefreshTime(updatedAt, language)}`;
+      : `${t("到站預報已更新")}：${formatEtaRefreshTime(updatedAt, language)}`;
 
   const getEtaString = (
     eta: Eta | null,
@@ -86,7 +90,7 @@ const SuccinctEtas = ({
       const exactTimeJsx = (
         <Box
           component="time"
-          dateTime={eta.eta}
+          dateTime={formatDateTimeForAttribute(eta.eta)}
           sx={{ fontSize: etaFormat !== "exact" ? "0.9em" : "1rem" }}
         >
           {eta.eta.slice(11, 16)}
@@ -135,7 +139,7 @@ const SuccinctEtas = ({
       aria-atomic="true"
     >
       {refreshAnnouncement && (
-        <Typography component="p" sx={visuallyHidden} role="status">
+        <Typography component="p" sx={visuallyHidden}>
           {refreshAnnouncement}
         </Typography>
       )}
@@ -210,13 +214,6 @@ export const DoubleTrainIcon = () => (
 );
 
 export default SuccinctEtas;
-
-const formatRefreshTime = (updatedAt: number, language: "zh" | "en") =>
-  new Intl.DateTimeFormat(language === "zh" ? "zh-HK" : "en-HK", {
-    hour: "numeric",
-    minute: "2-digit",
-    second: "2-digit",
-  }).format(updatedAt);
 
 const primarySx: SxProps<Theme> = {
   whiteSpace: "nowrap",

@@ -61,6 +61,21 @@ export const useEtas = (routeId: string, disable: boolean = false) => {
   return { etas, updatedAt } satisfies UseEtasResult;
 };
 
+export const formatEtaRefreshTime = (
+  updatedAt: number,
+  language: "zh" | "en"
+) =>
+  new Intl.DateTimeFormat(language === "zh" ? "zh-HK" : "en-HK", {
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+  }).format(updatedAt);
+
+export const formatDateTimeForAttribute = (value: string) =>
+  /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}(:\d{2})?$/.test(value)
+    ? value.replace(" ", "T")
+    : undefined;
+
 const DefaultRoute = {
   co: [""],
   stops: { "": [""] },
